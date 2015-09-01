@@ -1,0 +1,24 @@
+{
+  "name": "JSX",
+  "version": "0.0.0",
+  "description": "Transpile JSX to JS",
+  "keywords": ["JSX"],
+  "dependencies": {
+    "ast-children": "^0.2.0"
+  },
+  "devDependencies": {
+    "assert": "jkroso/assert",
+    "serve": "jkroso/serve",
+    "escodegen": "1",
+    "hydro-html": "*",
+    "hydro-bdd": "*",
+    "hydro-dot": "*",
+    "hydro": "*",
+    "jsmd": "*"
+  },
+  "transpile": [["*.js", "!sourcegraph/babel->js", {"stage": 0}]],
+  "repository": "git://github.com/jkroso/JSX.git",
+  "author": "Jake Rosoman",
+  "files": ["index.js"],
+  "license": "MIT"
+}
