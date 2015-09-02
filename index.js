@@ -139,13 +139,12 @@ const freshVars = node => {
   switch (node.type) {
     case 'VariableDeclaration':
       return node.declarations.map(d => d.id.name)
-    case 'FunctionExpression': return [] // early exit
+    case 'FunctionExpression':
+    case 'ArrowFunctionExpression': return [] // early exit
     case 'FunctionDeclaration': return [node.id.name]
-    case 'CatchClause': return [node.param.name]
+    case 'CatchClause': return freshVars(node.body).concat(node.param.name)
   }
-  return children(node)
-          .map(freshVars)
-          .reduce(concat, [])
+  return children(node).map(freshVars).reduce(concat, [])
 }
 
 const concat = (a, b) => a.concat(b)
@@ -171,6 +170,7 @@ map.ArrayExpression = (transforms, env, node) => {
   node.elements = node.elements.map(e => map(transforms, env, e))
 }
 
+map.ArrowFunctionExpression =
 map.FunctionDeclaration =
 map.FunctionExpression = (transforms, env, node) => {
   env = Object.create(env)

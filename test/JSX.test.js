@@ -10,7 +10,7 @@ it('out of scope nodes', () => {
 })
 
 it('in scope node', () => {
-  const src = 'var link = function() { return JSX("a", {href:"a"}) };'
+  const src = 'const link = () => JSX("a", {href:"a"});'
   assert(equiv(`${src}<link/>`, `${src}JSX(link)`))
   assert(equiv(`${src}<link.b/>`, `${src}JSX(link.b)`))
   assert(equiv(`${src}<link.b.c/>`, `${src}JSX(link.b.c)`))
@@ -31,4 +31,8 @@ it('children', () => {
   assert(equiv('<div onClick={()=>null}><a href="a">link</a></div>'
              , 'JSX("div", null, [JSX("a", {href:"a"}, ["link"])], null, {click:()=>null})'))
   assert(equiv('<span>a</span>', 'JSX("span", null, ["a"])'))
+})
+
+it('handle es6 features', () => {
+  assert(equiv('const link = ()=> <a href="a"/>', 'const link = ()=> JSX("a", {href:"a"})'))
 })
