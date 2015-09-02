@@ -4,7 +4,7 @@ const {parse} = require('espree')
 const transforms = {
   JSXElement(node, env) {
     const {name,attributes} = node.openingElement
-    const [attrs,params,events] = parseAttrs(attributes)
+    const [attrs,params,events,spreads] = parseAttrs(attributes)
     const callee =  name.name in env
       ? {type: 'Identifier', name: name.name}
       : {type: 'Literal', value: name.name}
@@ -21,6 +21,7 @@ const transforms = {
     if (children.elements.length) addArg(2, expr, children)
     if (params.properties.length) addArg(3, expr, params)
     if (events.properties.length) addArg(4, expr, events)
+    if (spreads.elements.length)  addArg(5, expr, spreads)
     return expr
   }
 }
@@ -79,7 +80,13 @@ const parseAttrs = attributes => {
   const attrs = {type: 'ObjectExpression', properties: []}
   const params = {type: 'ObjectExpression', properties: []}
   const events = {type: 'ObjectExpression', properties: []}
-  for (var {name, value} of attributes) {
+  const spreads = {type: 'ArrayExpression', elements: []}
+  for (var attr of attributes) {
+    if (attr.type == 'JSXSpreadAttribute') {
+      spreads.elements.push(attr.argument)
+      continue
+    }
+    var {name, value} = attr
     var property = {
       type: 'Property',
       kind: 'init',
@@ -95,7 +102,7 @@ const parseAttrs = attributes => {
       params.properties.push(property)
     }
   }
-  return [attrs, params, events]
+  return [attrs, params, events, spreads]
 }
 
 /**
