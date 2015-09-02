@@ -4,7 +4,8 @@
   "description": "Transpile JSX to JS",
   "keywords": ["JSX"],
   "dependencies": {
-    "ast-children": "^0.2.0"
+    "ast-children": "0",
+    "espree": "2"
   },
   "devDependencies": {
     "assert": "jkroso/assert",
