@@ -5,13 +5,10 @@ const transforms = {
   JSXElement(node, env) {
     const {name,attributes} = node.openingElement
     const [attrs,params,events,spreads] = parseAttrs(attributes)
-    const callee =  name.name in env
-      ? {type: 'Identifier', name: name.name}
-      : {type: 'Literal', value: name.name}
     const expr = {
       type: 'CallExpression',
       callee: {type: 'Identifier', name: 'JSX'},
-      arguments: [callee]
+      arguments: [parseCallee(name, env)]
     }
     const children = {
       type: 'ArrayExpression',
@@ -104,6 +101,32 @@ const parseAttrs = attributes => {
   }
   return [attrs, params, events, spreads]
 }
+
+const parseCallee = (node, env) =>
+  getTarget(node) in env
+    ? reuse(node)
+    : {type: 'Literal', value: toString(node)}
+
+const getTarget = node =>
+  node.type == 'JSXMemberExpression'
+    ? getTarget(node.object)
+    : node.name
+
+const reuse = node => {
+  if (node.type == 'JSXMemberExpression') {
+    node.type = 'MemberExpression'
+    reuse(node.object)
+    reuse(node.property)
+  } else {
+    node.type = 'Identifier'
+  }
+  return node
+}
+
+const toString = node =>
+  node.type == 'JSXMemberExpression'
+    ? toString(node.object) + '.' + toString(node.property)
+    : node.name
 
 /**
  * Get all declared variables within `node`'s scope

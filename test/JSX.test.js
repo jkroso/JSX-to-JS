@@ -5,11 +5,15 @@ const equiv = (a, b) => generate(JSX(a)) == generate(JSX(b))
 
 it('out of scope nodes', () => {
   assert(equiv('<div/>', 'JSX("div")'))
+  assert(equiv('<a.b/>', 'JSX("a.b")'))
+  assert(equiv('<a.b.c/>', 'JSX("a.b.c")'))
 })
 
 it('in scope node', () => {
-  assert(equiv('var link = function() { return JSX("a", {href:"a"}) };<link/>'
-             , 'var link = function() { return JSX("a", {href:"a"}) };JSX(link)'))
+  const src = 'var link = function() { return JSX("a", {href:"a"}) };'
+  assert(equiv(`${src}<link/>`, `${src}JSX(link)`))
+  assert(equiv(`${src}<link.b/>`, `${src}JSX(link.b)`))
+  assert(equiv(`${src}<link.b.c/>`, `${src}JSX(link.b.c)`))
 })
 
 it('attributes', () => {
