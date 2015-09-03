@@ -1,5 +1,5 @@
 const {generate} = require('escodegen')
-const JSX = require('..')
+const JSX = require('../index')
 
 const equiv = (a, b) => generate(JSX(a)) == generate(JSX(b))
 
@@ -18,18 +18,25 @@ it('in scope node', () => {
 
 it('attributes', () => {
   assert(equiv('<div class="a"/>', 'JSX("div", {class: "a"})'))
-  assert(equiv('<div class="a" cursor={1}/>', 'JSX("div", {class: "a"}, null, {cursor: 1})'))
+  assert(equiv('<div class="a" cursor={1}/>', 'JSX("div", {class: "a", cursor: 1})'))
   assert(equiv('<div class="a" cursor={1} onClick={()=>null}/>'
-             , 'JSX("div", {class: "a"}, null, {cursor: 1}, {click:()=>null})'))
+             , 'JSX("div", {class: "a", cursor: 1, onClick: ()=>null})'))
+  assert(equiv('<div tip={<a/>}/>', 'JSX("div", {tip: JSX("a")})'))
 })
 
 it('spread attributes', () => {
-  assert(equiv('<div {...rest}/>', 'JSX("div", null, null, null, null, [rest])'))
+  assert(equiv('<div {...rest}/>', 'JSX("div", rest)'))
+  assert(equiv('<div a={1} {...rest}/>', 'JSX("div", Object.assign({a:1}, rest))'))
+  assert(equiv('<div a={1} {...one} {...two}/>', 'JSX("div", Object.assign({a:1}, one, two))'))
+  assert(equiv('<div a={1} {...one} b={2} {...two}/>'
+             , 'JSX("div", Object.assign({a:1}, one, {b:2}, two))'))
+  assert(equiv('<div {...one} b={2} {...two}/>'
+             , 'JSX("div", Object.assign(Object.create(one), {b:2}, two))'))
 })
 
 it('children', () => {
   assert(equiv('<div onClick={()=>null}><a href="a">link</a></div>'
-             , 'JSX("div", null, [JSX("a", {href:"a"}, ["link"])], null, {click:()=>null})'))
+             , 'JSX("div", {onClick:()=>null}, [JSX("a", {href:"a"}, ["link"])])'))
   assert(equiv('<span>a</span>', 'JSX("span", null, ["a"])'))
 })
 
