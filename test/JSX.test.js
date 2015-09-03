@@ -1,7 +1,8 @@
-const {generate} = require('escodegen')
-const JSX = require('../index')
+const {transform:{fromAst}} = require('babel-core')
+const JSX = require('..')
 
-const equiv = (a, b) => generate(JSX(a)) == generate(JSX(b))
+const opts = {blacklist: ['react']}
+const equiv = (a, b) => fromAst(JSX(a), null, opts).code == fromAst(JSX(b), null, opts).code
 
 it('out of scope nodes', () => {
   assert(equiv('<div/>', 'JSX("div")'))
@@ -40,6 +41,12 @@ it('children', () => {
   assert(equiv('<span>a</span>', 'JSX("span", null, ["a"])'))
 })
 
-it('handle es6 features', () => {
-  assert(equiv('const link = ()=> <a href="a"/>', 'const link = ()=> JSX("a", {href:"a"})'))
+describe('With other ES6 features', () => {
+  it('arrow functions', () => {
+    assert(equiv('()=> <a href="a"/>', '()=> JSX("a", {href:"a"})'))
+  })
+
+  it('default parameters', () => {
+    assert(equiv('(a=<a/>)=>null', '(a=JSX("a"))=>null'))
+  })
 })

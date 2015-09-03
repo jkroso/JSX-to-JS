@@ -149,11 +149,20 @@ map.ArrayExpression = (transforms, env, node) => {
 
 map.ArrowFunctionExpression =
 map.FunctionDeclaration =
-map.FunctionExpression = (transforms, env, node) => {
-  env = Object.create(env)
-  freshVars(node.body).forEach(name => env[name] = undefined)
-  node.params.forEach(p => env[p.name] = undefined)
-  node.body = map(transforms, env, node.body)
+map.FunctionExpression = (transforms, old_env, node) => {
+  var new_env = Object.create(old_env)
+  freshVars(node.body).forEach(name => new_env[name] = undefined)
+  node.params = node.params.map(p => mapParam(p, old_env, new_env, transforms))
+  node.body = map(transforms, new_env, node.body)
+}
+
+const mapParam = (param, old_env, new_env, transforms) => {
+  if (param.type == 'Identifier') new_env[param.name] = undefined
+  if (param.type == 'AssignmentPattern') {
+    param.left = mapParam(param.left, old_env, new_env, transforms)
+    param.right = map(transforms, old_env, param.right)
+  }
+  return param
 }
 
 map.BlockStatement = (transforms, env, node) => {
@@ -199,7 +208,7 @@ map.UpdateExpression = (transforms, env, node) => {
 
 map.TryStatement = (transforms, env, node) => {
   node.block = map(transforms, env, node.block)
-  node.handler.body = map(transforms, env, node.handler.body)
+  node.handler = map(transforms, env, node.handler)
   node.finalizer = map(transforms, env, node.finalizer)
 }
 
