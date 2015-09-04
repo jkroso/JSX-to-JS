@@ -1,5 +1,4 @@
 const children = require('ast-children')
-const {parse} = require('babel-core')
 
 const transforms = {
   JSXElement({openingElement:{name, attributes}, children}, env) {
@@ -254,7 +253,7 @@ map.MemberExpression = (transforms, env, node) => {
 }
 
 const JSX = ast => {
-  if (typeof ast == 'string') ast = parse(ast)
+  if (typeof ast == 'string') ast = require('babel').parse(ast)
   return map(transforms, null, ast)
 }
 
