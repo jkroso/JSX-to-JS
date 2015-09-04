@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "serve": "jkroso/serve",
+    "escodegen": "1",
     "hydro-html": "*",
     "hydro-bdd": "*",
     "hydro-dot": "*",

@@ -1,9 +1,13 @@
 const {transform:{fromAst}} = require('babel')
+const {generate} = require('escodegen')
 const assert = require('assert')
-const JSX = require('..')
+const JSX = require('../index')
 
 const opts = {blacklist: ['react']}
-const equiv = (a, b) => fromAst(JSX(a), null, opts).code == fromAst(JSX(b), null, opts).code
+const equiv = (a, b) =>
+  generate(fromAst(JSX(a), null, opts).ast.program)
+  ==
+  generate(fromAst(JSX(b), null, opts).ast.program)
 
 it('out of scope nodes', () => {
   assert(equiv('<div/>', 'JSX("div")'))
