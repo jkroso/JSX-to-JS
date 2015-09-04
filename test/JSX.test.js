@@ -1,4 +1,5 @@
-const {transform:{fromAst}} = require('babel-core')
+const {transform:{fromAst}} = require('babel')
+const assert = require('assert')
 const JSX = require('..')
 
 const opts = {blacklist: ['react']}

@@ -1,5 +1,5 @@
 const children = require('ast-children')
-const {parse} = require('espree')
+const {parse} = require('babel-core')
 
 const transforms = {
   JSXElement({openingElement:{name, attributes}, children}, env) {
@@ -253,40 +253,8 @@ map.MemberExpression = (transforms, env, node) => {
   if (node.computed) node.property = map(transforms, env, node.property)
 }
 
-const parser_opts = {
-  loc: true,
-  comments: true,
-  ecmaFeatures: {
-    arrowFunctions: true,
-    blockBindings: true,
-    destructuring: true,
-    regexYFlag: true,
-    regexUFlag: true,
-    templateStrings: true,
-    binaryLiterals: true,
-    octalLiterals: true,
-    unicodeCodePointEscapes: true,
-    defaultParams: true,
-    restParams: true,
-    forOf: true,
-    objectLiteralComputedProperties: true,
-    objectLiteralShorthandMethods: true,
-    objectLiteralShorthandProperties: true,
-    objectLiteralDuplicateProperties: true,
-    generators: true,
-    spread: true,
-    superInFunctions: true,
-    classes: true,
-    newTarget: false,
-    modules: true,
-    jsx: true,
-    globalReturn: true,
-    experimentalObjectRestSpread: true
-  }
-}
-
 const JSX = ast => {
-  if (typeof ast == 'string') ast = parse(ast, parser_opts)
+  if (typeof ast == 'string') ast = parse(ast)
   return map(transforms, null, ast)
 }
 
