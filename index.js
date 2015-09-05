@@ -10,6 +10,9 @@ const transforms = {
     if (attributes.length) addArg(1, expr, parseAttrs(attributes, env))
     if (children.length)   addArg(2, expr, parseChildren(children, env))
     return expr
+  },
+  JSXExpressionContainer(node, env) {
+    return map(transforms, env, node.expression)
   }
 }
 
@@ -38,9 +41,7 @@ const parseAttrs = (attributes, env) => {
       type: 'Property',
       kind: 'init',
       key: reuse(name),
-      value: value.type == 'JSXExpressionContainer'
-        ? map(transforms, env, value.expression)
-        : value
+      value: map(transforms, env, value)
     })
   }
 

@@ -44,6 +44,7 @@ it('children', () => {
   assert(equiv('<div onClick={()=>null}><a href="a">link</a></div>'
              , 'JSX("div", {onClick:()=>null}, [JSX("a", {href:"a"}, ["link"])])'))
   assert(equiv('<span>a</span>', 'JSX("span", null, ["a"])'))
+  assert(equiv('<span>{1}</span>', 'JSX("span", null, [1])'))
 })
 
 describe('With other ES6 features', () => {
