@@ -23,6 +23,6 @@
   },
   "repository": "git://github.com/jkroso/JSX.git",
   "author": "Jake Rosoman",
-  "files": ["index.js"],
+  "files": ["index.js", "built.js"],
   "license": "MIT"
 }
