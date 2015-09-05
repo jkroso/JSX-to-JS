@@ -1,12 +1,12 @@
 {
-  "name": "JSX",
+  "name": "JSX-to-JS",
   "version": "0.0.0",
   "description": "Transpile JSX to JS",
   "keywords": ["JSX"],
   "main": "built.js",
   "dependencies": {
-    "babel": "5",
-    "ast-children": "0"
+    "map-ast": "0",
+    "babel": "5"
   },
   "devDependencies": {
     "serve": "jkroso/serve",
@@ -19,7 +19,7 @@
   },
   "transpile": [["*.js", "!sourcegraph/babel->js", {"stage": 0}]],
   "scripts": {
-    "install": "babel index.js > built.js"
+    "prepublish": "babel index.js > built.js"
   },
   "repository": "git://github.com/jkroso/JSX.git",
   "author": "Jake Rosoman",
