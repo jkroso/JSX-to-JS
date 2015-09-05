@@ -4,12 +4,12 @@ Transpile JSX to JS. Unlike other implementations it keeps track of the variable
 
 ## Installation
 
-`npm install JSX-to-JS`
+`npm install jsx-to-js`
 
 then in your app:
 
 ```js
-const JSX = require('JSX-to-JS')
+const JSX = require('jsx-to-js')
 ```
 
 ## API

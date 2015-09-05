@@ -1,5 +1,5 @@
 {
-  "name": "JSX-to-JS",
+  "name": "jsx-to-js",
   "version": "0.0.0",
   "description": "Transpile JSX to JS",
   "keywords": ["JSX"],
@@ -21,7 +21,7 @@
   "scripts": {
     "prepublish": "babel index.js > built.js"
   },
-  "repository": "git://github.com/jkroso/JSX.git",
+  "repository": "git://github.com/jkroso/JSX-to-JS.git",
   "author": "Jake Rosoman",
   "files": ["index.js", "built.js"],
   "license": "MIT"
