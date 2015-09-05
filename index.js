@@ -72,6 +72,11 @@ const call = (property, arg) => {
 }
 
 const parseChildren = (children, env) => {
+  children = children.filter(child => {
+    return !(child.type == 'Literal'
+      && typeof child.value == 'string'
+      && child.value.match(/^[ \t]*[\r\n][ \t\r\n]*$/))
+  })
   return {
     type: 'ArrayExpression',
     elements: children.map(child => map(transforms, env, child))
