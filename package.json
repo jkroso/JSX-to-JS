@@ -5,12 +5,12 @@
   "keywords": ["JSX"],
   "main": "built.js",
   "dependencies": {
-    "map-ast": "0",
-    "babel": "5"
+    "map-ast": "0"
   },
   "devDependencies": {
     "serve": "jkroso/serve",
     "escodegen": "1",
+    "babel": "5",
     "hydro-html": "*",
     "hydro-bdd": "*",
     "hydro-dot": "*",
