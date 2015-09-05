@@ -1,42 +1,10 @@
 if (typeof window != 'undefined') global.process={argv:[],env:{}} // browser hack
-const {fromAst} = require('babel-core/lib/transformation')
-const {generate} = require('escodegen')
-const {parse} = require('espree')
+const transform = require('babel-core/lib/transformation')
+const {babel_plugin} = require('../index')
 const assert = require('assert')
-const JSX = require('../index')
 
-const opts = {nonStandard: false, code: false}
-const parser_opts = {
-  ecmaFeatures: {
-    arrowFunctions: true,
-    blockBindings: true,
-    destructuring: true,
-    regexYFlag: true,
-    regexUFlag: true,
-    templateStrings: true,
-    binaryLiterals: true,
-    octalLiterals: true,
-    unicodeCodePointEscapes: true,
-    defaultParams: true,
-    restParams: true,
-    forOf: true,
-    objectLiteralComputedProperties: true,
-    objectLiteralShorthandMethods: true,
-    objectLiteralShorthandProperties: true,
-    objectLiteralDuplicateProperties: true,
-    generators: true,
-    spread: true,
-    superInFunctions: true,
-    classes: true,
-    newTarget: false,
-    modules: true,
-    jsx: true,
-    globalReturn: true,
-    experimentalObjectRestSpread: true
-  }
-}
-
-const transpile = src => generate(fromAst(JSX(parse(src,parser_opts)), null, opts).ast.program)
+const opts = {blacklist: ['react'], plugins: [babel_plugin]}
+const transpile = src => transform(src, opts).code.replace(/\s/g, '') // ignore whitespace
 const check = (a, b) => assert(transpile(a) == transpile(b))
 
 it('out of scope nodes', () => {

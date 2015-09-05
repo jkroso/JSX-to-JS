@@ -109,4 +109,14 @@ const toString = node =>
     ? toString(node.object) + '.' + toString(node.property)
     : node.name
 
-export default ast => map(transforms, null, ast)
+const babel_plugin = babel =>
+  new babel.Transformer('JSX-to-JS', {
+    Program(ast) {
+      return map(transforms, null, ast)
+    }
+  })
+
+const JSX = ast => map(transforms, null, ast)
+
+export default JSX
+export {babel_plugin, JSX}

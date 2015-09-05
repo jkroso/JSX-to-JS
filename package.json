@@ -1,6 +1,6 @@
 {
   "name": "jsx-to-js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Transpile JSX to JS",
   "keywords": ["JSX"],
   "main": "built.js",
@@ -9,9 +9,7 @@
   },
   "devDependencies": {
     "serve": "jkroso/serve",
-    "escodegen": "1",
     "babel-core": "5",
-    "espree": "2",
     "hydro-html": "*",
     "hydro-bdd": "*",
     "hydro-dot": "*",
