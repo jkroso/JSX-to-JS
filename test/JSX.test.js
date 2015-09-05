@@ -1,4 +1,4 @@
-global.process={argv:[],env:{}}
+if (typeof window != 'undefined') global.process={argv:[],env:{}} // browser hack
 const {fromAst} = require('babel-core/lib/transformation')
 const {generate} = require('escodegen')
 const {parse} = require('espree')
