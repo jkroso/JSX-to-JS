@@ -15,6 +15,5 @@ const JSX = require('jsx-to-js')
 ## API
 
 ```js
-JSX('<div/>') // => parse('JSX("div")')
 JSX(parse('<div/>')) // => parse('JSX("div")')
 ```

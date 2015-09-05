@@ -103,9 +103,4 @@ const toString = node =>
     ? toString(node.object) + '.' + toString(node.property)
     : node.name
 
-const JSX = ast => {
-  if (typeof ast == 'string') ast = require('babel').parse(ast)
-  return map(transforms, null, ast)
-}
-
-export default JSX
+export default ast => map(transforms, null, ast)
