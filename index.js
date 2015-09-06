@@ -41,7 +41,7 @@ const parseAttrs = (attributes, env) => {
       type: 'Property',
       kind: 'init',
       key: reuse(name),
-      value: map(transforms, env, value)
+      value: map(transforms, env, value || {type: 'Literal', value: true})
     })
   }
 

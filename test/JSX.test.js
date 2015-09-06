@@ -26,6 +26,7 @@ it('attributes', () => {
   check('<div class="a" cursor={1} onClick={()=>null}/>'
       , 'JSX("div", {class: "a", cursor: 1, onClick: ()=>null})')
   check('<div tip={<a/>}/>', 'JSX("div", {tip: JSX("a")})')
+  check('<input isfocused/>', 'JSX("input", {isfocused: true})')
 })
 
 it('spread attributes', () => {
