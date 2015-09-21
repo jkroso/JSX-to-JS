@@ -63,3 +63,7 @@ It takes a JSX AST node and returns a JS AST node. Simple as
 ```js
 JSX(parse('<div/>')) // => parse('JSX("div")')
 ```
+
+## Related projects
+
+- [eslint-plugin-jsx](//github.com/jkroso/eslint-plugin-jsx)
