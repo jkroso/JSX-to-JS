@@ -4,7 +4,7 @@ const {babel_plugin} = require('../index')
 const assert = require('assert')
 
 const opts = {blacklist: ['react'], plugins: [babel_plugin]}
-const transpile = src => transform(src, opts).code.replace(/\s/g, '') // ignore whitespace
+const transpile = src => transform(src, opts).code.replace(/[\s\n\r]+/g, ' ')
 const check = (a, b) => assert(transpile(a) == transpile(b))
 
 it('out of scope nodes', () => {
@@ -54,6 +54,7 @@ it('whitespace', () => {
   check('<a>\n  <b>1</b>\n</a>', 'JSX("a", null, [JSX("b", null, ["1"])])')
   check('<a>\n  <b>1</b>\n  <b>2</b>\n</a>'
       , 'JSX("a", null, [JSX("b", null, ["1"]), JSX("b", null, ["2"])])')
+  check('<a>\n  {1}\n</a>', 'JSX("a", null, [1])')
 })
 
 describe('With other ES6 features', () => {
