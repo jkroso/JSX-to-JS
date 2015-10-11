@@ -29,7 +29,7 @@ it('attributes', () => {
 })
 
 it('attribute shorthand', () => {
-  check('<input isfocused/>', 'JSX("input", {isfocused: true})')
+  check('<input isfocused/>', 'JSX("input", {isfocused: isfocused})')
   check('var a;<b a/>', 'var a;JSX("b", {a: a})')
 })
 

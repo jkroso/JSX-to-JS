@@ -41,7 +41,9 @@ const parseAttrs = (attributes, env) => {
       type: 'Property',
       kind: 'init',
       key: reuse(name),
-      value: parseAttrValue(env, name.name, value)
+      value: value == null
+        ? {type: 'Identifier', name: name.name}
+        : map(transforms, env, value)
     })
   }
 
@@ -57,12 +59,6 @@ const parseAttrs = (attributes, env) => {
   }
 
   return out
-}
-
-const parseAttrValue = (env, name, value) => {
-  if (value) return map(transforms, env, value)
-  if (name in env) return {type: 'Identifier', name}
-  return {type: 'Literal', value: true}
 }
 
 const call = (property, arg) => {

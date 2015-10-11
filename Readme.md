@@ -27,17 +27,16 @@ Transpiles JSX to JS but tries to be a more JavaScripty than the standard JSX tr
 
 2. __Provides ES6 style parameter shorthand__
 
-  If you don't provide a value to a parameter it will provide a default one by looking into the variable environment for a variable with the same name. If it doesn't find one it will default to `true` as per standard JSX
+  If you don't provide a value to a parameter it will default it to a variable with the same name
 
   ```js
-  const onMousedown = e => console.log(e)
   <component onMousedown isfocused/>
   ```
 
   This module produces:
 
   ```js
-  JSX(component, {onMousedown: onMousedown, isfocused: true})
+  JSX(component, {onMousedown: onMousedown, isfocused: isfocused})
   ```
 
   While a Standard JSX transpiler would produce:
