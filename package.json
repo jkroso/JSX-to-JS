@@ -1,6 +1,6 @@
 {
   "name": "jsx-to-js",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Transpile JSX to JS",
   "keywords": ["JSX"],
   "main": "built.js",
@@ -16,7 +16,7 @@
     "hydro": "*",
     "jsmd": "*"
   },
-  "transpile": [["*.js", "!sourcegraph/babel->js", {"stage": 0}]],
+  "transpile": [["{index,test/*}.js", "!sourcegraph/babel->js"]],
   "scripts": {
     "prepublish": "babel index.js > built.js"
   },
