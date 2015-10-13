@@ -1,6 +1,6 @@
 {
   "name": "jsx-to-js",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Transpile JSX to JS",
   "keywords": ["JSX"],
   "main": "built.js",

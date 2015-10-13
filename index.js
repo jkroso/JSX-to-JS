@@ -74,16 +74,30 @@ const call = (property, arg) => {
 }
 
 const parseChildren = (children, env) => {
+  // remove whitespace between nodes
   children = children.filter(child => {
     return !(child.type == 'Literal'
       && typeof child.value == 'string'
       && child.value.match(/^[ \t]*[\r\n][ \t\r\n]*$/))
   })
+  // remove leading and trailing new lines
+  var end = children.length - 1
+  children[0] = trim('left', children[0])
+  children[end] = trim('right', children[end])
   return {
     type: 'ArrayExpression',
     elements: children.map(child => map(transforms, env, child))
   }
 }
+
+const trim = (side, child) => {
+  if (child.type == 'Literal' && typeof child.value == 'string')
+    child.value = child.value.replace(trim[side], '')
+  return child
+}
+
+trim.left  = /^(?:[\r\n]+\s*)+/
+trim.right = /(?:\s*[\r\n]+)+$/
 
 const parseCallee = (node, env) =>
   getTarget(node) in env
