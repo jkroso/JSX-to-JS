@@ -13,12 +13,15 @@ const transforms = {
   },
   JSXExpressionContainer(node, env) {
     return map(transforms, env, node.expression)
+  },
+  JSXText(node) {
+    return literal(node.value)
   }
 }
 
 const addArg = (index, call, arg) => {
   while (call.arguments.length < index) {
-    call.arguments.push({type: 'Literal', value: null})
+    call.arguments.push(literal(null))
   }
   call.arguments.push(arg)
 }
@@ -38,7 +41,7 @@ const parseAttrs = (attributes, env) => {
     }
     var {name, value} = attr
     attrs.properties.push({
-      type: 'Property',
+      type: 'ObjectProperty',
       kind: 'init',
       key: reuse(name),
       value: value == null
@@ -75,11 +78,8 @@ const call = (property, arg) => {
 
 const parseChildren = (children, env) => {
   // remove whitespace between nodes
-  children = children.filter(child => {
-    return !(child.type == 'Literal'
-      && typeof child.value == 'string'
-      && child.value.match(/^[ \t]*[\r\n][ \t\r\n]*$/))
-  })
+  children = children.filter(child =>
+    child.type != 'JSXText' || !child.value.match(/^[ \t]*[\r\n][ \t\r\n]*$/))
   // remove leading and trailing new lines
   var end = children.length - 1
   children[0] = trim('left', children[0])
@@ -91,7 +91,7 @@ const parseChildren = (children, env) => {
 }
 
 const trim = (side, child) => {
-  if (child.type == 'Literal' && typeof child.value == 'string')
+  if (child.type == 'JSXText')
     child.value = child.value.replace(trim[side], '')
   return child
 }
@@ -102,7 +102,7 @@ trim.right = /(?:\s*[\r\n]+)+$/
 const parseCallee = (node, env) =>
   getTarget(node) in env
     ? reuse(node)
-    : {type: 'Literal', value: toString(node)}
+    : literal(toString(node))
 
 const getTarget = node =>
   node.type == 'JSXMemberExpression'
@@ -125,10 +125,22 @@ const toString = node =>
     ? toString(node.object) + '.' + toString(node.property)
     : node.name
 
-const babel_plugin = babel =>
-  new babel.Transformer('JSX-to-JS', {
-    Program(ast) {
-      return map(transforms, null, ast)
+const literal = value => {
+  var type
+  if (typeof value == 'number') type = 'NumberLiteral'
+  else if (typeof value == 'string') type = 'StringLiteral'
+  else if (typeof value == 'boolean') type = 'BooleanLiteral'
+  else if (value === null) type = 'NullLiteral'
+  else type = 'RegexLiteral'
+  return {type, value}
+}
+
+const babel_plugin = () =>
+  ({
+    visitor: {
+      Program(path) {
+        path.node.body = map(transforms, null, path.node).body
+      }
     }
   })
 

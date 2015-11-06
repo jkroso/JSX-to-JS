@@ -1,6 +1,6 @@
 {
   "name": "jsx-to-js",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Transpile JSX to JS",
   "keywords": ["JSX"],
   "main": "built.js",
@@ -9,12 +9,14 @@
   },
   "devDependencies": {
     "serve": "jkroso/serve",
-    "babel-core": "5",
+    "babel-core": "6",
+    "babel-preset-es2015": "6",
+    "babel-plugin-syntax-jsx": "6",
     "hydro-html": "*",
     "hydro-bdd": "*",
     "hydro-dot": "*",
-    "hydro": "*",
-    "jsmd": "*"
+    "babel": "5",
+    "hydro": "*"
   },
   "transpile": [["{index,test/*}.js", "!sourcegraph/babel->js"]],
   "scripts": {

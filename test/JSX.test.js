@@ -1,9 +1,13 @@
 if (typeof window != 'undefined') global.process={argv:[],env:{}} // browser hack
-const transform = require('babel-core/lib/transformation')
+const {transform} = require('babel-core')
 const {babel_plugin} = require('../index')
 const assert = require('assert')
 
-const opts = {blacklist: ['react'], plugins: [babel_plugin]}
+const opts = {
+  presets: [require('babel-preset-es2015')],
+  plugins: [require('babel-plugin-syntax-jsx'), babel_plugin]
+}
+
 const transpile = src => transform(src, opts).code.replace(/[\s\n\r]+/g, ' ')
 const check = (a, b) => assert(transpile(a) == transpile(b))
 
