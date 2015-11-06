@@ -43,7 +43,7 @@ const parseAttrs = (attributes, env) => {
     attrs.properties.push({
       type: 'ObjectProperty',
       kind: 'init',
-      key: reuse(name),
+      key: toKey(name),
       value: value == null
         ? {type: 'Identifier', name: name.name}
         : map(transforms, env, value)
@@ -63,6 +63,11 @@ const parseAttrs = (attributes, env) => {
 
   return out
 }
+
+const toKey = ident =>
+  /^[a-zA-Z$][\w$]*$/.test(ident.name)
+    ? reuse(ident)
+    : literal(ident.name)
 
 const call = (property, arg) => {
   return {
